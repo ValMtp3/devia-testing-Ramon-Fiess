@@ -11,7 +11,7 @@ def get_users():
 
 @user_routes.route("/users/<int:user_id>", methods=["GET"])
 def get_user(user_id):
-    user = User.query.get(user_id)
+    user = db.session.get(User, user_id)
     if user:
         return jsonify(user.to_dict()), 200
     return jsonify({"error": "User not found"}), 404
@@ -23,7 +23,7 @@ def create_user():
         return jsonify({"error": "Name and email are required"}), 400
 
     if User.query.filter_by(email=data["email"]).first():
-        return jsonify({"error": "Email already exists"}), 400
+        return jsonify({"error": "Email already exists"}), 409
 
     new_user = User(name=data["name"], email=data["email"])
     db.session.add(new_user)
@@ -32,7 +32,7 @@ def create_user():
 
 @user_routes.route("/users/<int:user_id>", methods=["PUT"])
 def update_user(user_id):
-    user = User.query.get(user_id)
+    user = db.session.get(User, user_id) 
     if not user:
         return jsonify({"error": "User not found"}), 404
 
@@ -44,7 +44,7 @@ def update_user(user_id):
 
 @user_routes.route("/users/<int:user_id>", methods=["DELETE"])
 def delete_user(user_id):
-    user = User.query.get(user_id)
+    user = db.session.get(User, user_id) 
     if not user:
         return jsonify({"error": "User not found"}), 404
 
