@@ -1,6 +1,7 @@
 from flask import Flask
 from models.database import db
 from routes.user_routes import user_routes
+from routes.service_routes import service_routes
 from flask_migrate import Migrate
 
 
@@ -15,6 +16,7 @@ def create_app():
 
     # Register blueprints
     app.register_blueprint(user_routes, url_prefix="/api")
+    app.register_blueprint(service_routes, url_prefix="/apii")
 
     return app
 

@@ -22,7 +22,7 @@ class ServiceTestCase(unittest.TestCase):
     # Tests de base CRUD (Create, Read, Update, Delete)
 
     def test_create_service(self):
-        response = self.client.post("/api/services", json={
+        response = self.client.post("/apii/services", json={
             "name": "Cleaning",
             "description": "Apartment deep cleaning service",
             "prix": 150
@@ -31,32 +31,32 @@ class ServiceTestCase(unittest.TestCase):
         self.assertIn("Cleaning", str(response.data))
 
     def test_get_services(self):
-        self.client.post("/api/services", json={
+        self.client.post("/apii/services", json={
             "name": "Cleaning",
             "description": "Apartment deep cleaning service",
             "prix": 150
         })
-        response = self.client.get("/api/services")
+        response = self.client.get("/apii/services")
         self.assertEqual(response.status_code, 200)
         self.assertIn("Cleaning", str(response.data))
 
     def test_get_service(self):
-        self.client.post("/api/services", json={
+        self.client.post("/apii/services", json={
             "name": "Cleaning",
             "description": "Apartment deep cleaning service",
             "prix": 150
         })
-        response = self.client.get("/api/services/1")
+        response = self.client.get("/apii/services/1")
         self.assertEqual(response.status_code, 200)
         self.assertIn("Cleaning", str(response.data))
 
     def test_update_service(self):
-        self.client.post("/api/services", json={
+        self.client.post("/apii/services", json={
             "name": "Cleaning",
             "description": "Apartment deep cleaning service",
             "prix": 150
         })
-        response = self.client.put("/api/services/1", json={
+        response = self.client.put("/apii/services/1", json={
             "name": "Deep Cleaning",
             "description": "Full apartment deep cleaning",
             "prix": 200
@@ -66,17 +66,17 @@ class ServiceTestCase(unittest.TestCase):
         self.assertIn("200", str(response.data))
 
     def test_delete_service(self):
-        self.client.post("/api/services", json={
+        self.client.post("/apii/services", json={
             "name": "Cleaning",
             "description": "Apartment deep cleaning service",
             "prix": 150
         })
-        response = self.client.delete("/api/services/1")
+        response = self.client.delete("/apii/services/1")
         self.assertEqual(response.status_code, 200)
         self.assertIn("Service deleted successfully", str(response.data))
 
     def test_create_service_without_description(self):
-        response = self.client.post("/api/services", json={
+        response = self.client.post("/apii/services", json={
             "name": "Cleaning",
             "prix": 150
         })
@@ -84,7 +84,7 @@ class ServiceTestCase(unittest.TestCase):
         self.assertIn("Missing required fields", str(response.data))
 
     def test_create_service_with_invalid_prix(self):
-        response = self.client.post("/api/services", json={
+        response = self.client.post("/apii/services", json={
             "name": "Cleaning",
             "description": "Apartment deep cleaning service",
             "prix": "invalid_price"
@@ -93,12 +93,12 @@ class ServiceTestCase(unittest.TestCase):
         self.assertIn("Invalid price format", str(response.data))
 
     def test_create_service_with_duplicate_name(self):
-        self.client.post("/api/services", json={
+        self.client.post("/apii/services", json={
             "name": "Cleaning",
             "description": "Apartment deep cleaning service",
             "prix": 150
         })
-        response = self.client.post("/api/services", json={
+        response = self.client.post("/apii/services", json={
             "name": "Cleaning",
             "description": "Another cleaning service",
             "prix": 120
@@ -107,39 +107,39 @@ class ServiceTestCase(unittest.TestCase):
         self.assertIn("Service name already exists", str(response.data))
 
     def test_get_nonexistent_service(self):
-        response = self.client.get("/api/services/999")
+        response = self.client.get("/apii/services/999")
         self.assertEqual(response.status_code, 404)
         self.assertIn("Service not found", str(response.data))
 
     def test_update_service_with_invalid_data(self):
-        self.client.post("/api/services", json={
+        self.client.post("/apii/services", json={
             "name": "Cleaning",
             "description": "Apartment deep cleaning service",
             "prix": 150
         })
-        response = self.client.put("/api/services/1", json={
+        response = self.client.put("/apii/services/1", json={
             "prix": "invalid_price"
         })
         self.assertEqual(response.status_code, 400)
         self.assertIn("Invalid price format", str(response.data))
 
     def test_delete_nonexistent_service(self):
-        response = self.client.delete("/api/services/999")
+        response = self.client.delete("/apii/services/999")
         self.assertEqual(response.status_code, 404)
         self.assertIn("Service not found", str(response.data))
 
     def test_multiple_services_creation_and_retrieval(self):
-        self.client.post("/api/services", json={
+        self.client.post("/apii/services", json={
             "name": "Cleaning",
             "description": "Apartment deep cleaning service",
             "prix": 150
         })
-        self.client.post("/api/services", json={
+        self.client.post("/apii/services", json={
             "name": "Babysitting",
             "description": "Professional babysitting services for children",
             "prix": 200
         })
-        response = self.client.get("/api/services")
+        response = self.client.get("/apii/services")
         self.assertEqual(response.status_code, 200)
         self.assertIn("Cleaning", str(response.data))
         self.assertIn("Babysitting", str(response.data))
