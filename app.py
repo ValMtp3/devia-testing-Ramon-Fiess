@@ -1,6 +1,8 @@
 from flask import Flask
 from models.database import db
 from routes.user_routes import user_routes
+from flask_migrate import Migrate
+
 
 def create_app():
     app = Flask(__name__)

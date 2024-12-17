@@ -1,8 +1,13 @@
 from flask import Blueprint, request, jsonify
 from models.database import db
 from models.user import User
+import re
 
 user_routes = Blueprint("user_routes", __name__)
+
+def validate_email(email):
+    pattern = r'^[^\s@]+@[^\s@]+\.[^\s@]+$'
+    return re.match(pattern, email) is not None
 
 @user_routes.route("/users", methods=["GET"])
 def get_users():
@@ -19,8 +24,12 @@ def get_user(user_id):
 @user_routes.route("/users", methods=["POST"])
 def create_user():
     data = request.get_json()
+    email = data.get("email")
     if not data.get("name") or not data.get("email"):
-        return jsonify({"error": "Name and email are required"}), 400
+        return jsonify({"error": "Missing required fields"}), 400
+    
+    if not validate_email(email):
+        return jsonify({"error": "Invalid email format"}), 400
 
     if User.query.filter_by(email=data["email"]).first():
         return jsonify({"error": "Email already exists"}), 409
@@ -39,6 +48,10 @@ def update_user(user_id):
     data = request.get_json()
     user.name = data.get("name", user.name)
     user.email = data.get("email", user.email)
+    
+    if not validate_email(user.email):
+        return jsonify({"error": "Invalid email format"}), 400
+
     db.session.commit()
     return jsonify(user.to_dict()), 200
 
