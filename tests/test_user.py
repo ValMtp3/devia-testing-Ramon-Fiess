@@ -61,7 +61,7 @@ class UserTestCase(unittest.TestCase):
 
     def test_create_user_with_duplicate_email(self):
         self.client.post("/api/users", json={"name": "John Doe", "email": "john@example.com"})
-        response = self.client.post("/api/users", json={"name": "Jane Doe", "email": "john@example.com"})
+        response = self.client.post("/api/users", json={"name": "John Doe", "email": "john@example.com"})
         self.assertEqual(response.status_code, 409)
         self.assertIn("Email already exists", str(response.data))
 
