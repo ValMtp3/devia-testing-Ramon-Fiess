@@ -4,12 +4,14 @@ from routes.user_routes import user_routes
 from routes.service_routes import service_routes
 from routes.commande_routes import commande_routes
 from flask_migrate import Migrate
+from flask_sqlalchemy import SQLAlchemy
 
 
 def create_app():
     app = Flask(__name__)
     app.config.from_object("config.Config")
-
+    
+    migrate = Migrate(app, db)
     # Initialize database
     db.init_app(app)
     with app.app_context():
