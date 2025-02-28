@@ -9,7 +9,6 @@ class Commande(db.Model):
     prix = db.Column(db.Integer, nullable=False)
     location = db.Column(db.String(200), nullable=False)
     date = db.Column(db.String(200), nullable=False)
-    cs
 
     def to_dict(self):
         return {"id": self.id, "name": self.name, "description": self.description, "prix": self.prix, "location": self.location, "date": self.date}

@@ -58,10 +58,10 @@ class CommandeTestCase(unittest.TestCase):
 
     def test_update_commande(self):
         self.client.post("/apiii/commandes", json={
-            "name": "Drone 2",
-            "description": "Second best drone ever",
-            "prix": 200,
-            "location": "Montpellier",
+            "name": "Drone",
+            "description": "Best drone ever",
+            "prix": 150,
+            "location": "Dakar",
             "date": "2021-10-10"
         })
         response = self.client.put("/apiii/commandes/1", json={
